@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'login/login.dart';
 
-
 void main() {
   runApp(
     MultiProvider(
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: Splash(),
     );
   }
 }

@@ -15,15 +15,6 @@ class Layout extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => LyoutProvider(),
       builder: (context, chiled) => Scaffold(
-        appBar: AppBar(
-          title: Text(provider.appBar[provider.currantPageIndex]),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search),
-            )
-          ],
-        ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: (index) {
             provider.changeBottomNavigationBar(index, context);
@@ -31,7 +22,7 @@ class Layout extends StatelessWidget {
           currentIndex: provider.currantPageIndex,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'الرئيسية'),
-            BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'طلبات'),
+            BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'الطلبات'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person), label: 'الملف الشخصي'),
           ],
