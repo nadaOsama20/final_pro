@@ -15,17 +15,6 @@ class MenuPage extends StatelessWidget {
           appBar: AppBar(
             title: Text('طلباتي'),
             centerTitle: true,
-            bottom: const TabBar(tabs: [
-              Tab(
-                text: 'الاستفسارات',
-              ),
-              Tab(
-                text: 'قيد التنفيذ',
-              ),
-              Tab(
-                text: 'المكتملة',
-              )
-            ]),
             actions: [
               IconButton(
                 onPressed: () {},
@@ -53,7 +42,7 @@ class MenuPage extends StatelessWidget {
 
 Widget itemOrder(String title, String day) => Card(
       child: Container(
-        height: 130,
+        height: 150,
         child: Padding(
             padding: const EdgeInsets.all(14.0),
             child: Row(

@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
 
-Widget textfield({
-  required TextEditingController controller,
-  Function? validate,
-  Function? onChange,
-  Function? onSubmit,
-  required TextInputType inputType,
-  required String text,
-  required IconData prefix,
-  IconData? suffixIcon,
-  Function? suffixPress,
-  bool isPassword = false,
-  double radius = 0.0,
-  Function? onTapFunc,
-}) =>
-
-
+Widget textfield(
+        {required TextEditingController controller,
+        required Function validate,
+        required TextInputType inputType,
+        required String text,
+        required IconData prefix,
+        IconData? suffixIcon,
+        Function? suffixPress,
+        bool isPassword = false,
+        double radius = 0.0,
+        bool? readOnly = false}) =>
     TextFormField(
-      onTap: () => onTapFunc!,
       controller: controller,
-      // validator: validate!(),
-      // onChanged: onChange!(),
-      // onFieldSubmitted: onSubmit!(),
+      validator: (value) => validate(value),
       obscureText: isPassword,
       keyboardType: inputType,
+      readOnly: readOnly!,
       decoration: InputDecoration(
         labelText: text,
         prefixIcon: Icon(prefix),
@@ -63,4 +56,13 @@ Widget defaultButton({
 void naviagtTo(context, Widget) => Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Widget),
+    );
+void naviagtTofinish(context, widget) => Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => widget,
+      ),
+      (route) {
+        return false;
+      },
     );

@@ -1,5 +1,7 @@
+import 'package:final_pro/layout/layout_Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import '/layout/layout.dart';
 import '/login/register.dart';
 
@@ -13,6 +15,7 @@ class LoginPage extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LyoutProvider>(context);
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -20,6 +23,7 @@ class LoginPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Form(
+              key: formKey,
               child: Column(
                 children: [
                   const SizedBox(
@@ -49,15 +53,12 @@ class LoginPage extends StatelessWidget {
                   textfield(
                       controller: emailController,
                       radius: 50,
-                      onSubmit: (value) {
-                        if (formKey.currentState!.validate()) {}
+                      validate: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please Enter Email';
+                        }
+                        return null;
                       },
-                      // validate: (value) {
-                      //   if (value.isEmpty) {
-                      //     return 'Please Enter Email';
-                      //   }
-                      //   return null;
-                      // },
                       inputType: TextInputType.emailAddress,
                       text: 'Email',
                       prefix: Icons.email),
@@ -67,15 +68,12 @@ class LoginPage extends StatelessWidget {
                   textfield(
                       radius: 50,
                       controller: passController,
-                      onSubmit: (value) {
-                        if (formKey.currentState!.validate()) {}
+                      validate: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please Enter password';
+                        }
+                        return null;
                       },
-                      // validate: (String value) {
-                      //   if (value.isEmpty) {
-                      //     return 'Please Enter password';
-                      //   }
-                      //   return null;
-                      // },
                       inputType: TextInputType.text,
                       text: 'Password',
                       prefix: Icons.lock),
@@ -85,7 +83,13 @@ class LoginPage extends StatelessWidget {
                   defaultButton(
                     radius: 50,
                     function: () {
-                      naviagtTo(context, Layout());
+                      if (formKey.currentState!.validate()) {
+                        provider.userLogin(
+                            context: context,
+                            email: emailController.text,
+                            password: passController.text);
+                            
+                      }
                     },
                     text: 'SIGN IN',
                   ),

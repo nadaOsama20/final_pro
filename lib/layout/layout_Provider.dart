@@ -1,17 +1,14 @@
-import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_pro/components.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import '../components.dart';
-import '../login/login.dart';
+import '../model/user_model.dart';
 import '/pages/homePage.dart';
 import '/pages/menuPage.dart';
 import '/pages/personPage.dart';
-import '/splash/splash.dart';
+import 'layout.dart';
 
 class LyoutProvider with ChangeNotifier {
-
-        
-
   List screen = [HomePage(), MenuPage(), PErsonPage()];
   List appBar = ['انجز لي التصميم', 'طلباتي', 'الملف الشخصي'];
 
@@ -20,5 +17,93 @@ class LyoutProvider with ChangeNotifier {
     currantPageIndex = index;
     notifyListeners();
   }
-  
+
+  void userLogin(
+      {required String email, required String password, required context}) {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      naviagtTofinish(context, Layout());
+      getUserData(value.user!.uid);
+      notifyListeners();
+    }).catchError((erorr) {
+      print(erorr.toString());
+      notifyListeners();
+    });
+  }
+
+  void userRegister(
+      {required String name,
+      required String email,
+      required String password,
+      required String phone,
+      required context}) {
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    )
+        .then((value) {
+      print(value.user!.email);
+      print(value.user!.uid);
+      createUser(
+        name: name,
+        email: email,
+        uId: value.user!.uid,
+        phone: phone,
+      );
+      getUserData(value.user!.uid);
+
+      naviagtTofinish(context, Layout());
+      notifyListeners();
+    }).catchError((erorr) {
+      print(erorr.toString());
+      notifyListeners();
+    });
+  }
+
+  void createUser({
+    required String name,
+    required String email,
+    required String uId,
+    required String phone,
+  }) {
+    UserModel model = UserModel(
+      email: email,
+      name: name,
+      phone: phone,
+      uId: uId,
+    );
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .set(model.toMap())
+        .then((value) {
+      notifyListeners();
+    }).catchError((error) {
+      print(error.toString());
+    });
+    notifyListeners();
+  }
+
+  void getUserData(String uId) {
+    FirebaseFirestore.instance.collection('users').doc(uId).get().then(
+      (value) {
+        userModel = UserModel.fromJson(value.data());
+        print(userModel!.name);
+        print(userModel!.email);
+        print(userModel!.uId);
+
+        notifyListeners();
+      },
+    ).catchError(
+      (error) {
+        print(error.toString());
+        notifyListeners();
+      },
+    );
+    notifyListeners();
+  }
 }
+
+UserModel? userModel;

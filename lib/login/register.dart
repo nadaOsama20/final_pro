@@ -1,6 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../components.dart';
+import '../layout/layout_Provider.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -12,20 +16,17 @@ class RegisterPage extends StatelessWidget {
   var loginController = PageController();
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LyoutProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         titleSpacing: -15,
-        title: TextButton(
-          child: Text(
-            'SGIN IN',
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey[800]),
+        title: Text(
+          'SGIN IN',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
           ),
-          onPressed: () {
-            // naviagtTofinish(context, ShopLoginSecreen());
-          },
         ),
       ),
       body: Center(
@@ -43,12 +44,6 @@ class RegisterPage extends StatelessWidget {
                           color: Colors.black,
                         ),
                   ),
-                  // Text(
-                  //   'Register now to browse our hot offers',
-                  //   style: Theme.of(context).textTheme.bodyText1.copyWith(
-                  //     color: Colors.grey,
-                  //   ),
-                  // ),
                   SizedBox(
                     height: 40.0,
                   ),
@@ -86,15 +81,12 @@ class RegisterPage extends StatelessWidget {
                     radius: 50,
                     controller: passwordController,
                     inputType: TextInputType.visiblePassword,
-
-                    onSubmit: (value) {},
-
-                    // validate: (String value) {
-                    //   if (value.isEmpty) {
-                    //     return 'password is too short';
-                    //   }
-                    // },
                     text: 'Password',
+                    validate: (String value) {
+                      if (value.isEmpty) {
+                        return 'please enter your password';
+                      }
+                    },
                     prefix: Icons.lock_outline,
                   ),
                   SizedBox(
@@ -117,7 +109,16 @@ class RegisterPage extends StatelessWidget {
                   ),
                   defaultButton(
                     radius: 50,
-                    function: () {},
+                    function: () {
+                      if (formKey.currentState!.validate()) {
+                        provider.userRegister(
+                            name: nameController.text,
+                            email: emailController.text,
+                            password: passwordController.text,
+                            phone: phoneController.text,
+                            context: context);
+                      }
+                    },
                     text: 'SIGN Up',
                   ),
                 ],
