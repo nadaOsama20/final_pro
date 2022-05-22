@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import '../pages/homePage.dart';
+import '../pages/menuPage.dart';
+import '../pages/personPage.dart';
 import 'layout_Provider.dart';
 
 class Layout extends StatelessWidget {
-  const Layout({Key? key}) : super(key: key);
+  Layout({Key? key}) : super(key: key);
+  List screen = [HomePage(), MenuPage(), PErsonPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class Layout extends StatelessWidget {
                 icon: Icon(Icons.person), label: 'الملف الشخصي'),
           ],
         ),
-        body: provider.screen[provider.currantPageIndex],
+        body: screen[provider.currantPageIndex],
       ),
     );
   }

@@ -3,15 +3,10 @@ import 'package:final_pro/components.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import '../model/user_model.dart';
-import '/pages/homePage.dart';
-import '/pages/menuPage.dart';
-import '/pages/personPage.dart';
+
 import 'layout.dart';
 
-class LyoutProvider with ChangeNotifier {
-  List screen = [HomePage(), MenuPage(), PErsonPage()];
-  List appBar = ['انجز لي التصميم', 'طلباتي', 'الملف الشخصي'];
-
+class LyoutProvider extends ChangeNotifier {
   int currantPageIndex = 0;
   void changeBottomNavigationBar(int index, context) {
     currantPageIndex = index;
@@ -23,8 +18,9 @@ class LyoutProvider with ChangeNotifier {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      naviagtTofinish(context, Layout());
       getUserData(value.user!.uid);
+      naviagtTofinish(context, Layout());
+
       notifyListeners();
     }).catchError((erorr) {
       print(erorr.toString());
@@ -34,15 +30,12 @@ class LyoutProvider with ChangeNotifier {
 
   void userRegister(
       {required String name,
-      required String email,
+      required  String email,
       required String password,
       required String phone,
       required context}) {
     FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    )
+        .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
       print(value.user!.email);
       print(value.user!.uid);
@@ -86,7 +79,7 @@ class LyoutProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void getUserData(String uId) {
+  void getUserData( String uId) {
     FirebaseFirestore.instance.collection('users').doc(uId).get().then(
       (value) {
         userModel = UserModel.fromJson(value.data());
